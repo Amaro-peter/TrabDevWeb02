@@ -1,0 +1,253 @@
+import { useEffect, useState } from "react";
+import type { ProjetoCarrinho } from "./CardsPorSlugCategoria";
+import useRecuperarProjetosSociaisPorIdCarrinho from "../hooks/useRecuperarProjetosSociaisPorIdCarrinho";
+import { useNavigate } from "react-router-dom";
+
+
+const NaN = (value : number): boolean => {
+    return Number.isNaN(value);
+}
+
+const CarrinhoPage = () => {
+
+    const[carrinho, setCarrinho] = useState<ProjetoCarrinho[]>(() => {
+        const itensDeCarrinho = localStorage.getItem("carrinho");
+        return itensDeCarrinho ? JSON.parse(itensDeCarrinho) : [];
+    });
+
+    const [inputQuantities, setInputQuantities] = useState<{ [id: number]: string }>({});
+
+    useEffect(() => {
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    }, [carrinho]);
+
+    const navigate = useNavigate();
+
+    const handleVoltarDoacoes = () => {
+        navigate("/facaUmaDoacao");
+    }
+
+    const atualizarQuantidade = (idProjeto: number, novaQuantidade: number) => {
+        if(novaQuantidade < 1) {
+            return;
+        }
+
+        setCarrinho((atual: ProjetoCarrinho[]) => 
+            atual.map((item) =>
+                item.idProjeto === idProjeto ? { ...item, quantidade: novaQuantidade} : item
+            )
+        );
+    };
+
+    const {
+        data: projetosSociais,
+        isPending: carregandoProjetos,
+        error: errorProjetos,
+    } = useRecuperarProjetosSociaisPorIdCarrinho(carrinho.map((item: ProjetoCarrinho) => item.idProjeto));
+
+    const tratarRemocao = (idProjeto: number) => {
+        projetosSociais?.filter((projeto) => projeto.id !== idProjeto);
+        setCarrinho((atual: ProjetoCarrinho[]) => 
+            atual.filter((item) => item.idProjeto !== idProjeto));
+        setInputQuantities((prev) => {
+            const { [idProjeto]:_, ...rest } = prev;
+            return rest;
+        });
+
+    }
+
+    if(carregandoProjetos) {
+        return (
+            <div className="container text-center py-5">
+                <h2>Carregando projetos sociais...</h2>
+            </div>
+        );
+    }
+
+    if(errorProjetos) {
+        throw errorProjetos;
+    }
+
+    return (
+        <div
+            className="container-fluid py-5"
+            style={{
+                backgroundColor: "antiquewhite",
+                marginTop: "64px",
+                minHeight: "100vh",
+                borderBottom: "2px solid black",
+            }}
+            >
+                <div className="container text-center" style={{ paddingTop: "40px", paddingBottom: "20px" }}>
+                    <section id="titulo" className="mb-5">
+                        <div className="card shadow-sm" style={{ border: '2px solid black' }}>
+                            <div className="card-body text-center py-5">
+                                <h1 style={{ color: '#c54708' }} className="mb-3">
+                                    Carrinho
+                                </h1>
+                                <p className="fw-bold fs-4">
+                                    Veja os itens do seu carrinho.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div className="table-responsive">
+                        <table className="table table-responsive table-bordered table-sm table-hover table-striped align-middle">
+                            <thead className="table-light">
+                                <tr className="text-center">
+                                    <th className="text-center align-middle">Projeto Social</th>
+                                    <th className="text-center align-middle">Doação</th>
+                                    <th className="text-center align-middle">Quantidade</th>
+                                    <th className="text-center align-middle">Doação Total</th>
+                                    <th className="text-center align-middle">Remover</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {projetosSociais.map((projeto) => {
+                                    const itemCarrinho = carrinho.find(
+                                        (item: ProjetoCarrinho) => item.idProjeto === projeto.id
+                                    );
+
+                                    const projetoAtual = itemCarrinho ? itemCarrinho : "";
+
+                                    const currentStr = inputQuantities[projeto.id as number] !== undefined ? 
+                                        inputQuantities[projeto.id as number]
+                                        : String(itemCarrinho ? itemCarrinho.quantidade : 0);
+                                    
+                                    const valorParse = parseInt(currentStr);
+
+                                    const quantidadeForCalc = currentStr === "" || NaN(valorParse) ? 1 : valorParse;
+
+                                    const precoTotal = quantidadeForCalc * projeto.doacao;
+
+                                    return (
+                                        <tr key={projeto.id}>
+                                            <td className="text-start">
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <img src={projeto.imagem} alt={projeto.nome} style={{ width: "300px" }} />
+                                                    <div>
+                                                        <strong>
+                                                            {projeto.nome}
+                                                        </strong> 
+                                                        
+                                                        <br />
+
+                                                        <small>
+                                                            {projeto.descricao}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="text-center">
+                                                R${projeto.doacao.toLocaleString("pt-BR", {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2,
+                                                    useGrouping: true
+                                                })}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <input 
+                                                    type="number"
+                                                    min={0}
+                                                    className="form-control form-control-sm text-center"
+                                                    value={currentStr}
+                                                    onChange={(e) => {
+                                                        const newValue = e.target.value;
+                                                        setInputQuantities((prev) => ({
+                                                            ...prev,
+                                                            [projeto.id as number]: newValue,
+                                                        }));
+                                                        const parsed = parseInt(newValue);
+                                                        if(newValue !== "" && !NaN(parsed) && projetoAtual !== "") {
+                                                            atualizarQuantidade(projetoAtual.idProjeto, parsed);
+                                                        }
+                                                    }}
+
+                                                    onBlur={(e) => {
+                                                        const newValue = e.target.value;
+                                                        const parsed = parseInt(newValue);
+                                                        if((newValue === "" || NaN(parsed)) && projetoAtual !== "") {
+                                                            e.target.focus();
+                                                        }
+                                                    }}
+                                                    style={{ maxWidth: "80px", margin: "auto" }}
+
+                                                />
+                                            </td>
+
+                                            <td className="text-center">
+                                                R$  {precoTotal.toLocaleString("pt-BR", {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2,
+                                                    useGrouping: true
+                                                })}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <button className="btn btn-danger btn-sm" onClick={() => tratarRemocao(projeto.id!)}>
+                                                    Remover
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                                )}
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <td className="text-center align-middle" colSpan={3}>
+                                    Total...
+                                    </td>
+                                    <td className="text-center align-middle">
+                                        R$ {projetosSociais.reduce((total, projeto) => {
+                                            const itemCarrinho = carrinho.find(
+                                                (item: ProjetoCarrinho) => item.idProjeto === projeto.id
+                                            );
+
+                                            const currentStr = inputQuantities[projeto.id as number] !== undefined ? 
+                                                inputQuantities[projeto.id as number]
+                                                : String(itemCarrinho ? itemCarrinho.quantidade : 0);
+
+                                            const valorParsed = parseInt(currentStr);
+
+                                            const quantidadeCalc = currentStr === "" || NaN(valorParsed) ? 1 : valorParsed;
+
+                                            return total + quantidadeCalc * projeto.doacao;
+
+                                        }, 0).toLocaleString("pt-BR", {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                            useGrouping: true
+                                        })}
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div className="container mt-3">
+                        <div className="d-flex flex-column flex-md-row justify-content-md-evenly align-items-center gap-2">
+                            <button 
+                            className="donor-button"
+                            onClick={handleVoltarDoacoes}
+                            >
+                            Voltar para doações
+                            </button>
+                            
+                            <button className="ngo-button">
+                            Fechar doações
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    )
+};
+
+export default CarrinhoPage;
