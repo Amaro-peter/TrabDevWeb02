@@ -12,6 +12,7 @@ import ErrorPage from "../pages/ErrorPage";
 import FavoritosPage from "../pages/FavoritosPage";
 import CarrinhoPage from "../pages/CarrinhoPage";
 import ProjetosSociais from "../pages/ProjetosSociaisPage";
+import ProjetoSocialPage from "../pages/ProjetoSocialPage";
 
 
 const router = createBrowserRouter([
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
             {
                 path: "/projetos",
                 element: <ProjetosSociais />
+            },
+            {
+                path: "projetos/:id",
+                element: <ProjetoSocialPage />
             }
         ]
     },
