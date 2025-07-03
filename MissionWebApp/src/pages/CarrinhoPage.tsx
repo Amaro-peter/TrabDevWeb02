@@ -21,6 +21,23 @@ const CarrinhoPage = () => {
         localStorage.setItem("carrinho", JSON.stringify(carrinho));
     }, [carrinho]);
 
+    useEffect(() => {
+        const handleStoreChage = () => {
+            const itensDeCarrinho = localStorage.getItem("carrinho");
+            const novoCarrinho = itensDeCarrinho ? JSON.parse(itensDeCarrinho) : [];
+            setCarrinho(novoCarrinho);
+        };
+
+        window.addEventListener('storage', handleStoreChage);
+
+        window.addEventListener('carrinhoAtualizado', handleStoreChage);
+
+        return () => {
+            window.removeEventListener('storage', handleStoreChage);
+            window.removeEventListener('carrinhoAtualizado', handleStoreChage);
+        }
+    }, []);
+
     const navigate = useNavigate();
 
     const handleVoltarDoacoes = () => {
@@ -37,6 +54,10 @@ const CarrinhoPage = () => {
                 item.idProjeto === idProjeto ? { ...item, quantidade: novaQuantidade} : item
             )
         );
+
+        setTimeout(() => {
+            window.dispatchEvent(new Event('carrinhoAtualizado'));
+        }, 0);
     };
 
     const {
@@ -49,10 +70,15 @@ const CarrinhoPage = () => {
         projetosSociais?.filter((projeto) => projeto.id !== idProjeto);
         setCarrinho((atual: ProjetoCarrinho[]) => 
             atual.filter((item) => item.idProjeto !== idProjeto));
+
         setInputQuantities((prev) => {
             const { [idProjeto]:_, ...rest } = prev;
             return rest;
         });
+
+        setTimeout(() => {
+            window.dispatchEvent(new Event('carrinhoAtualizado'));
+        }, 0);
 
     }
 

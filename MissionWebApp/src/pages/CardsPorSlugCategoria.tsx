@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import useRecuperarProjetosSociasPorSlugCategoriaComPaginacao from "../hooks/useRecuperarProjetosSociasPorSlugCategoriaComPaginacao";
 import Card from "../components/Card";
 import useFavoritarProjetosSociais from "../hooks/useFavoritarProjetosSociais";
+import useUsuarioStore from "../store/useUsuarioStore";
+import useRecuperarFavoritos from "../hooks/useRecuperarFavoritos";
 
 
 export interface ProjetoCarrinho {
@@ -13,6 +15,13 @@ export interface ProjetoCarrinho {
 }
 
 const CardsPorSlugCategoria = () => {
+    const usuarioLogado = useUsuarioStore((s) => s.usuarioLogado);
+    const adicionarFavorito = useUsuarioStore((s) => s.addFavorito);
+    const removerFavorito = useUsuarioStore((s) => s.removeFavorito);
+    const isFavorito = useUsuarioStore((s) => s.isFavorito);
+
+    useRecuperarFavoritos(usuarioLogado);
+
     const tamanho = useProjetoSocialStore((s) => s.tamanho);
 
     const[carrinho, setCarrinho] = useState(() => {
@@ -22,6 +31,7 @@ const CardsPorSlugCategoria = () => {
 
     useEffect(() => {
         localStorage.setItem("carrinho", JSON.stringify(carrinho));
+        window.dispatchEvent(new Event('carrinhoAtualizado'));
     }, [carrinho]);
 
     function adicionarProjetoSocial(projeto: ProjetoSocial) {
@@ -55,6 +65,12 @@ const CardsPorSlugCategoria = () => {
     const { mutate: favoritarProjetoSocialMutate, error: errorFavoritarProjetoSocial } = useFavoritarProjetosSociais();
 
     const favoritarProjetoSocial = (projeto: ProjetoSocial, idConta: Number) => {
+        if(isFavorito(projeto.id!)) {
+            removerFavorito(projeto.id!);
+        } else {
+            adicionarFavorito(projeto);
+        }
+
         favoritarProjetoSocialMutate({ projeto, idConta });
     }
 

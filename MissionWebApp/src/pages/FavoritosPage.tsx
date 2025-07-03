@@ -17,11 +17,29 @@ const FavoritosPage = () => {
         return itensDeCarrinho ? JSON.parse(itensDeCarrinho) : [];
     });
 
+
     const [inputQuantities, setInputQuantities] = useState<{ [id: number]: string }>({});
 
     useEffect(() => {
         localStorage.setItem("carrinho", JSON.stringify(carrinho));
     }, [carrinho]);
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const itensCarrinho = localStorage.getItem("carrinho");
+            const novoCarrinho = itensCarrinho ? JSON.parse(itensCarrinho) : [];
+            setCarrinho(novoCarrinho);
+        }
+
+        window.addEventListener('storage', handleStorageChange);
+
+        window.addEventListener('carrinhoAtualizado', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('carrinhoAtualizado', handleStorageChange);
+        };
+    }, []);
 
     const navigate = useNavigate();
 
@@ -30,15 +48,52 @@ const FavoritosPage = () => {
     }
 
     const atualizarQuantidade = (idProjeto: number, novaQuantidade: number) => {
-        if(novaQuantidade < 1) {
+        if(novaQuantidade < 0) {
             return;
         }
 
-        setCarrinho((atual: ProjetoCarrinho[]) => 
-            atual.map((item) =>
-                item.idProjeto === idProjeto ? { ...item, quantidade: novaQuantidade} : item
-            )
-        );
+        if(novaQuantidade === 0) {
+            setCarrinho((atual: ProjetoCarrinho[]) =>
+                atual.filter((item: ProjetoCarrinho) => item.idProjeto !== idProjeto)
+            );
+
+            setInputQuantities((prev) => {
+                const { [idProjeto]: _, ...rest} = prev;
+                return rest;
+            });
+            
+        } else {
+            setCarrinho((atual: ProjetoCarrinho[]) =>
+                atual.map((item) =>
+                    item.idProjeto === idProjeto ? { ...item, quantidade: novaQuantidade} : item
+                )
+            );
+        }
+
+        
+
+        setTimeout(() => {
+            window.dispatchEvent(new Event('carrinhoAtualizado'));
+        }, 0);
+    };
+
+    const removerItem = (idProjeto: number) => {
+        setCarrinho((atual: ProjetoCarrinho[]) => {
+            const novoCarrinho = atual.filter((item: ProjetoCarrinho) => item.idProjeto !== idProjeto);
+
+            window.dispatchEvent(new Event('carrinhoAtualizado'));
+
+            return novoCarrinho;
+        });
+
+        setInputQuantities((prev) => {
+            const { [idProjeto]: _, ...rest } = prev;
+            return rest;
+        });
+
+        setTimeout(() => {
+            window.dispatchEvent(new Event('carrinhoAtualizado'));
+        }, 0);
     };
 
     const usuario = useUsuarioStore((s) => s.usuarioLogado);
@@ -59,8 +114,6 @@ const FavoritosPage = () => {
     if(errorProjetos) {
         throw new Error("Erro ao carregar projetos sociais favoritos: " + errorProjetos.message);
     }
-
-    console.log("Projetos sociais favoritos:", projetosSociais);
 
     return (
         <div
@@ -156,8 +209,19 @@ const FavoritosPage = () => {
                                                             [projeto.id as number]: newValue,
                                                         }));
                                                         const parsed = parseInt(newValue);
-                                                        if(newValue !== "" && !NaN(parsed) && projetoAtual !== "") {
-                                                            atualizarQuantidade(projetoAtual.idProjeto, parsed);
+                                                        if(newValue !== "" && !NaN(parsed)) {
+                                                            if(projetoAtual !== "") {
+                                                                atualizarQuantidade(projetoAtual.idProjeto, parsed);
+                                                            } else if (parsed > 0) {
+                                                                setCarrinho((prev: ProjetoCarrinho[]) => [
+                                                                    ...prev,
+                                                                    { idProjeto: projeto.id as number, quantidade: parsed }
+                                                                ]);
+
+                                                                setTimeout(() => {
+                                                                    window.dispatchEvent(new Event('carrinhoAtualizado'));
+                                                                }, 0);
+                                                            }
                                                         }
                                                     }}
 

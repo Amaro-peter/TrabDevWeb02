@@ -15,6 +15,7 @@ interface Props {
 
 const Card = ({ projeto, adicionarProjetoSocial, subtrairProjetoSocial, projetosNoCarrinho, favoritarProjetoSocial }: Props) => {
     const usuarioLogado = useUsuarioStore((s) => s.usuarioLogado);
+    const isFavorito = useUsuarioStore((s) => s.isFavorito);
 
     const[isClicked, setIsClicked] = useState(false);
 
@@ -39,7 +40,7 @@ const Card = ({ projeto, adicionarProjetoSocial, subtrairProjetoSocial, projetos
                                 }}
                             >
                                 <img 
-                                    src={isClicked ? heartFilled : heart}
+                                    src={isFavorito(projeto.id!) ? heartFilled : heart}
                                     alt="Favoritar"
                                     style={{ width: "20px", height: "24px" }}
                                 />

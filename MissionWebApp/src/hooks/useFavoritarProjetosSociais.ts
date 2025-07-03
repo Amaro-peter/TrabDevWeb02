@@ -27,10 +27,17 @@ const favoritarProjetosSociais = async ({ projeto, idConta }: { projeto: Projeto
 const useFavoritarProjetosSociais = () => {
     return useMutation({
         mutationFn: favoritarProjetosSociais,
-        onSuccess: () => {
+        onSuccess: (_, variables) => {
             queryClient.invalidateQueries({
                 queryKey: ["projetosSociaisFavoritados"]
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: ["projetosSociaisFavoritados", variables.idConta]
             })
+        },
+        onError: (error) => {
+            console.error("Erro ao favoritar projeto social:", error);
         }
     });
 };

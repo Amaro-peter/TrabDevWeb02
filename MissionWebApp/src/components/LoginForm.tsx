@@ -15,10 +15,13 @@ interface FormLogin {
 const LoginForm = () => {
     const setUsuarioLogado = useUsuarioStore((s) => s.setUsuarioLogado);
     const setUsuarioRole = useUsuarioStore((s) => s.setUsuarioRole);
+    const limparFavorito = useUsuarioStore((s) => s.limparFavoritos);
     const [loginInvalido, setLoginInvalido] = useState(false);
 
     useEffect(() => {
         setUsuarioLogado(0); //Logout ao entrar na tela de login
+        setUsuarioRole("");
+        limparFavorito();
     }, []);
 
     const location = useLocation();
