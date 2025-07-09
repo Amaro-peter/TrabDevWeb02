@@ -101,31 +101,67 @@ const ProjetoSocialPage = () => {
                                     </div>
                                     {usuarioLogado === 1 && (
                                         <>
-                                            <div className="col-lg-3 col-md-4 col-6 mt-3">
+                                            <div className="col-lg-3 col-md-4 col-12 mt-3">
                                                 <button
                                                     onClick={() => {
                                                         setProjetoSocialSelecionado(projeto);
                                                         navigate("/cadastrar-projeto-social");
                                                     }}
                                                     disabled={removido}
-                                                    className="btn btn-primary btn-sm me-3 w-100"
+                                                    className="btn btn-sm me-3 w-100"
                                                     type="button"
+                                                    style={{
+                                                        backgroundColor: "#FFC3A5",
+                                                        border: "2px solid black",
+                                                        color: "#444",
+                                                        fontSize: "1rem",
+                                                        fontWeight: "bold",
+                                                        transition: "all 0.25s ease-in-out",
+                                                        padding: "0.5em 1em",
+                                                        borderRadius: "0.3em",
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#ffc0a8";
+                                                        e.currentTarget.style.transform = "scale(1.02)";
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#FFC3A5";
+                                                        e.currentTarget.style.transform = "scale(1)";
+                                                    }}
                                                 >
                                                     Editar
                                                 </button>
                                             </div>
                                         
-                                            <div className="col-lg-3 col-md-4 col-6 mt-3">
+                                            <div className="col-lg-3 col-md-4 col-12 mt-3">
                                                 <button
-                                                    /*onClick={() => tratarRemocao(produto.id!)}
-                                                    disabled={removido}*/
-                                                    className="btn btn-danger btn-sm w-100"
+                                                    /*onClick={() => tratarRemocao(projeto.id!)}*/
+                                                    disabled={removido}
+                                                    className="btn btn-sm w-100"
                                                     type="button"
+                                                    style={{
+                                                        backgroundColor: "#FF8866",
+                                                        border: "2px solid black",
+                                                        color: "#444",
+                                                        fontSize: "1rem",
+                                                        fontWeight: "bold",
+                                                        transition: "all 0.25s ease-in-out",
+                                                        padding: "0.5em 1em",
+                                                        borderRadius: "0.3em",
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#ff6b47";
+                                                        e.currentTarget.style.transform = "scale(1.02)";
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#FF8866";
+                                                        e.currentTarget.style.transform = "scale(1)";
+                                                    }}
                                                 >
                                                     Remover
                                                 </button>
                                             </div>
-                                            </>
+                                        </>
                                     )}
                                 </div>
                             </div>

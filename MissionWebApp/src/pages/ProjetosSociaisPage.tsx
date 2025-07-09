@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 
 
 const ProjetosSociais = () => {
@@ -62,6 +63,25 @@ const ProjetosSociais = () => {
                             <p className="fw-bold fs-5">
                                 Acreditamos que a transparência e a responsabilidade são os pilares que fortalecem a confiança e o desenvolvimento sustentável das instituições parceiras.
                             </p>
+                        </div>
+                    </div>
+                </section>
+                <section id="teste" className="mb-5">
+                    <div className="card shadow-sm" style={{ border: '2px solid black' }}>
+                        <div className="card-header">
+                            <h2 style={{ color: '#c54708' }} className="mb-0">
+                                Teste de botões
+                            </h2>
+                        </div>
+                        <div className="card-body">
+                            <div className="col-12 mt-2 d-grid gap-2">
+                                <NavLink to={"/projetos/1"} className="btn btn-primary">
+                                    Projetos
+                                </NavLink>
+                                <NavLink to={"/cadastrar-projeto-social"} className="btn btn-primary">
+                                    Cadastrar
+                                </NavLink>
+                            </div>
                         </div>
                     </div>
                 </section>
