@@ -13,6 +13,7 @@ import FavoritosPage from "../pages/FavoritosPage";
 import CarrinhoPage from "../pages/CarrinhoPage";
 import ProjetosSociais from "../pages/ProjetosSociaisPage";
 import ProjetoSocialPage from "../pages/ProjetoSocialPage";
+import CadastrarProjetoSocialPage from "../pages/CadastrarProjetoSocialPage";
 
 
 const router = createBrowserRouter([
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
             {
                 path: "projetos/:id",
                 element: <ProjetoSocialPage />
+            },
+            {
+                path: "cadastrar-projeto-social",
+                element: <CadastrarProjetoSocialPage />
             }
         ]
     },
