@@ -6,9 +6,11 @@ interface UsuarioStore {
     usuarioLogado: number;
     usuarioRole: string;
     usuarioSelecionado: Usuario;
+    mensagem: string;
     favoritos: ProjetoSocial[];
 
     setUsuarioLogado: (novoUsuarioLogado: number) => void;
+    setMensagem: (novaMensagem: string) => void;
     setUsuarioRole: (novaUsuarioRole: string) => void;
     setUsuarioSelecionado: (novoUsuarioSelecionado: Usuario) => void;
     setFavoritos: (favoritos: ProjetoSocial[]) => void;
@@ -16,17 +18,21 @@ interface UsuarioStore {
     removeFavorito: (idProjeto: number) => void;
     isFavorito: (idProjeto: number) => boolean;
     limparFavoritos: () => void;
+    getMensagem: () => string;
 }
 
 const useUsuarioStore = create<UsuarioStore>((set, get) => ({
     usuarioLogado: 0,
     usuarioRole: "",
     usuarioSelecionado: {} as Usuario,
+    mensagem: "",
     favoritos: [],
 
     setUsuarioLogado: (novoUsuarioLogado: number) => set({ usuarioLogado: novoUsuarioLogado }),
     setUsuarioRole: (novaUsuarioRole: string) => set({ usuarioRole: novaUsuarioRole }),
     setUsuarioSelecionado: (novoUsuarioSelecionado: Usuario) => set({ usuarioSelecionado: novoUsuarioSelecionado}),
+
+    setMensagem: (novaMensagem: string) => set(() => ({mensagem: novaMensagem})),
     
     setFavoritos: (favoritos: ProjetoSocial[]) => set({ favoritos }),
     
@@ -44,6 +50,11 @@ const useUsuarioStore = create<UsuarioStore>((set, get) => ({
     },
     
     limparFavoritos: () => set({ favoritos: [] }),
+
+    getMensagem: () => {
+        const { mensagem } = get();
+        return mensagem;
+    },
 }));
 
 export default useUsuarioStore;

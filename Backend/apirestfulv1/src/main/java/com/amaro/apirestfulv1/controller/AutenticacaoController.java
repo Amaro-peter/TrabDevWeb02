@@ -27,12 +27,12 @@ public class AutenticacaoController {
     }
 
     @PostMapping("cadastrar") //http://localhost:8080/autenticacao/cadastrar
-    public TokenResponse cadastrar(@RequestBody Usuario usuario) {
+    public Boolean cadastrar(@RequestBody Usuario usuario) {
         Usuario usuarioLogado = autenticacaoService.cadastrarUsuario(usuario);
         if (usuarioLogado != null) {
-            return new TokenResponse(usuarioLogado.getId(), usuarioLogado.getRole());
+            return true;
         } else {
-            return new TokenResponse(0, "");
+            return false;
         }
     }
 }
