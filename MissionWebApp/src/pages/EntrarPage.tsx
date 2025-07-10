@@ -1,13 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CadastrarForm from "../components/CadastrarForm";
 import LoginForm from "../components/LoginForm";
+import useUsuarioStore from "../store/useUsuarioStore";
 
 const EntrarPage = () => {
+    const mensagem = useUsuarioStore((s) => s.getMensagem());
+    const setMensagem = useUsuarioStore((s) => s.setMensagem);
+
     const [showLogin, setShowLogin] = useState(true);
 
     const handleToggle = () => {
         setShowLogin((prev) => !prev);
     };
+
+    useEffect(() => {
+        if(mensagem) {
+            handleToggle();
+            const timer = setTimeout(() => {
+                setMensagem("");
+            }, 10000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [mensagem, setMensagem]);
 
     return (
         <div
@@ -27,6 +42,12 @@ const EntrarPage = () => {
                         </h5>
 
                         <hr className="mt-1" />
+
+                        {mensagem && (
+                            <div className="alert alert-primary alert-dismissible fade show mt-3" role="alert">
+                                <strong>Sucesso!</strong> {mensagem}
+                            </div>
+                        )}
 
                         <div className="mt-4">
                             {showLogin ? <LoginForm /> : <CadastrarForm />}
