@@ -21,7 +21,6 @@ public class FavoritosService{
 
         if (!usuario.getFavoritos().contains(projeto)) {
             usuario.getFavoritos().add(projeto);
-            usuarioRepository.save(usuario);
         }
     }
 
@@ -30,8 +29,7 @@ public class FavoritosService{
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        usuario.getFavoritos().removeIf(p -> p.getId().equals(idProjeto));
-        usuarioRepository.save(usuario);
+        boolean removido = usuario.getFavoritos().removeIf(p -> p.getId().equals(idProjeto));
     }
 
     public List<ProjetoSocial> recuperarFavoritos(Long idUsuario) {

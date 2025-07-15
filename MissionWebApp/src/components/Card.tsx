@@ -3,7 +3,6 @@ import type { ProjetoCarrinho } from "../pages/CardsPorSlugCategoria";
 import useUsuarioStore from "../store/useUsuarioStore";
 import heart from "../assets/heart.svg";
 import heartFilled from "../assets/heart-fill.svg";
-import { useState } from "react";
 
 interface Props {
     projeto: ProjetoSocial;
@@ -11,18 +10,19 @@ interface Props {
     adicionarProjetoSocial: (projeto: ProjetoSocial) => void;
     subtrairProjetoSocial: (projeto: ProjetoSocial) => void;
     favoritarProjetoSocial: (projeto: ProjetoSocial, id: Number) => void;
+    removerItemFavorito: (idUsuario: number, idProjeto: number) => void;
 }
 
-const Card = ({ projeto, adicionarProjetoSocial, subtrairProjetoSocial, projetosNoCarrinho, favoritarProjetoSocial }: Props) => {
+const Card = ({ projeto, adicionarProjetoSocial, subtrairProjetoSocial, projetosNoCarrinho, favoritarProjetoSocial, removerItemFavorito }: Props) => {
     const usuarioLogado = useUsuarioStore((s) => s.usuarioLogado);
     const isFavorito = useUsuarioStore((s) => s.isFavorito);
 
-    const[isClicked, setIsClicked] = useState(false);
-
     const handleFavoritar = () => {
-        setIsClicked(!isClicked);
-        if(!isClicked) {
+        const novoFavorito = !isFavorito(projeto.id!);
+        if(novoFavorito) {
             favoritarProjetoSocial(projeto, usuarioLogado);
+        } else {
+            removerItemFavorito(usuarioLogado, projeto.id!);
         }
     }
 

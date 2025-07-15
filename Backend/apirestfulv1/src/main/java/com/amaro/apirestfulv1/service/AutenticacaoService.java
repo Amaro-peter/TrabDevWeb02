@@ -15,6 +15,12 @@ public class AutenticacaoService {
     }
 
     public Usuario cadastrarUsuario(Usuario usuario) {
+        Usuario usuarioExiste = usuarioRepository.findByConta(usuario.getConta());
+
+        if (usuarioExiste != null) {
+            return null;
+        }
+
         return usuarioRepository.save(usuario);
     }
 }

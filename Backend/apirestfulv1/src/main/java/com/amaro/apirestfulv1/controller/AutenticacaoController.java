@@ -7,9 +7,14 @@ import com.amaro.apirestfulv1.util.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("autenticacao") //http://localhost:8080/autenticacao
+@CrossOrigin(
+        origins = "http://localhost:5173",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true"
+)
 public class AutenticacaoController {
 
     @Autowired
