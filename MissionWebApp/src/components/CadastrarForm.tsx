@@ -61,6 +61,8 @@ const CadastrarForm = () => {
     senha,
     role,
   }: CadastrarForm) => {
+      setcadastroInvalido(false);
+      
       const usuario: Usuario = {
         role: role,
         conta: conta,
@@ -71,7 +73,7 @@ const CadastrarForm = () => {
 
       cadastrarUsuario(usuario, {
         onSuccess: (response: Boolean) => {
-          if(response) {
+          if(response === true) {
             setMensagem("Usuário cadastrado com sucesso!");
             navigate("/entrar")
           }
@@ -92,7 +94,7 @@ const CadastrarForm = () => {
         <div className="row">
           <div className="col-lg-6">
             <div className="alert alert-danger fw-bold" role="alert">
-              Cadastro não ocorreu!
+              Cadastro não ocorreu! A conta já existe.
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import useRecuperarFavoritos from "../hooks/useRecuperarFavoritos";
 import useUsuarioStore from "../store/useUsuarioStore";
 import type { ProjetoCarrinho } from "./CardsPorSlugCategoria";
 import { useNavigate } from "react-router-dom";
+import useRemoverFavoritos from "../hooks/useRemoverFavoritos";
 
 
 const NaN = (value : number): boolean => {
@@ -11,6 +12,11 @@ const NaN = (value : number): boolean => {
 
 
 const FavoritosPage = () => {
+
+    const usuarioLogado = useUsuarioStore((s) => s.usuarioLogado);
+    const removerFavoritosStore = useUsuarioStore((s) => s.removeFavorito);
+
+    console.log("Usuário logado:", usuarioLogado);
 
     const[carrinho, setCarrinho] = useState<ProjetoCarrinho[]>(() => {
         const itensDeCarrinho = localStorage.getItem("carrinho");
@@ -77,23 +83,18 @@ const FavoritosPage = () => {
         }, 0);
     };
 
-    const removerItem = (idProjeto: number) => {
-        setCarrinho((atual: ProjetoCarrinho[]) => {
-            const novoCarrinho = atual.filter((item: ProjetoCarrinho) => item.idProjeto !== idProjeto);
+    const { mutate: removerFavorito } = useRemoverFavoritos();
 
-            window.dispatchEvent(new Event('carrinhoAtualizado'));
+    const removerItem = (idUsuario: number, idProjeto: number) => {
 
-            return novoCarrinho;
-        });
+        removerFavorito({ idUsuario, idProjeto });
+
+        removerFavoritosStore(idProjeto);
 
         setInputQuantities((prev) => {
             const { [idProjeto]: _, ...rest } = prev;
             return rest;
         });
-
-        setTimeout(() => {
-            window.dispatchEvent(new Event('carrinhoAtualizado'));
-        }, 0);
     };
 
     const usuario = useUsuarioStore((s) => s.usuarioLogado);
@@ -246,7 +247,7 @@ const FavoritosPage = () => {
                                             </td>
 
                                             <td className="text-center">
-                                                <button className="btn btn-danger btn-sm" /*onClick={() => tratarRemocao(projeto.id!)}*/>
+                                                <button className="btn btn-danger btn-sm" onClick={() => removerItem(usuarioLogado, projeto.id as number)}>
                                                     Remover
                                                 </button>
                                             </td>

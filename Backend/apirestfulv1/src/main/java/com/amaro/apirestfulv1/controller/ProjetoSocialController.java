@@ -15,8 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
 @RequestMapping("projetos") // http://localhost:8080/projetos
+@CrossOrigin(
+        origins = "http://localhost:5173",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true"
+)
 public class ProjetoSocialController {
     @Autowired
     private ProjetoSocialService projetoSocialService;
@@ -115,6 +120,11 @@ public class ProjetoSocialController {
 
         // Add to favorites
         favoritosService.adicionarFavorito(idConta, projeto);
+    }
+
+    @DeleteMapping("remover-favorito")
+    public void removerFavorito(@RequestParam("idUsuario") Long idUsuario, @RequestParam("idProjeto") Long idProjeto) {
+        favoritosService.removerFavorito(idUsuario, idProjeto);
     }
 
     @PutMapping

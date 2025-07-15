@@ -7,6 +7,7 @@ import Card from "../components/Card";
 import useFavoritarProjetosSociais from "../hooks/useFavoritarProjetosSociais";
 import useUsuarioStore from "../store/useUsuarioStore";
 import useRecuperarFavoritos from "../hooks/useRecuperarFavoritos";
+import useRemoverFavoritos from "../hooks/useRemoverFavoritos";
 
 
 export interface ProjetoCarrinho {
@@ -17,8 +18,7 @@ export interface ProjetoCarrinho {
 const CardsPorSlugCategoria = () => {
     const usuarioLogado = useUsuarioStore((s) => s.usuarioLogado);
     const adicionarFavorito = useUsuarioStore((s) => s.addFavorito);
-    const removerFavorito = useUsuarioStore((s) => s.removeFavorito);
-    const isFavorito = useUsuarioStore((s) => s.isFavorito);
+    const removerFavoritosStore = useUsuarioStore((s) => s.removeFavorito);
 
     useRecuperarFavoritos(usuarioLogado);
 
@@ -64,12 +64,18 @@ const CardsPorSlugCategoria = () => {
 
     const { mutate: favoritarProjetoSocialMutate, error: errorFavoritarProjetoSocial } = useFavoritarProjetosSociais();
 
+    const { mutate: removerFavorito } = useRemoverFavoritos();
+
+    const removerItemFavorito = (idUsuario: number, idProjeto: number) => {
+
+        removerFavorito({ idUsuario, idProjeto });
+
+        removerFavoritosStore(idProjeto);
+
+    };
+
     const favoritarProjetoSocial = (projeto: ProjetoSocial, idConta: Number) => {
-        if(isFavorito(projeto.id!)) {
-            removerFavorito(projeto.id!);
-        } else {
-            adicionarFavorito(projeto);
-        }
+        adicionarFavorito(projeto);
 
         favoritarProjetoSocialMutate({ projeto, idConta });
     }
@@ -125,6 +131,7 @@ const CardsPorSlugCategoria = () => {
                             adicionarProjetoSocial = {adicionarProjetoSocial}
                             subtrairProjetoSocial = {subtrairProjetoSocial}
                             favoritarProjetoSocial={favoritarProjetoSocial}
+                            removerItemFavorito={removerItemFavorito}
                             />
                         </div>
                     ))
