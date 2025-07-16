@@ -17,7 +17,7 @@ const regexData = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/;
 
 const regexImage = /^[a-z]+\.(gif|jpg|png|jpeg|bmp)$/;
 
-const regexContato = /^(\(?\d{2}\)?[\s-]?)?(9?\d{4})[\s-]?\d{4}$/;
+const regexContato = /^(\+55\s?)?\(?\d{2}\)?\s?\d{4,5}-\d{4}$/;
 
 const schema = z.object({
     nome: z

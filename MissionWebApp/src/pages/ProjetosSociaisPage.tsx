@@ -1,15 +1,17 @@
-import { NavLink } from "react-router-dom";
+import Paginacao from "../components/Paginacao";
+import Pesquisa from "../components/Pesquisa";
+import TabelaDeProjetosSociais from "../components/TabelaDeProjetosSociais";
 
 
 const ProjetosSociais = () => {
   return (
     <>
         <div
-            className="container-fluid py-5 w-100"
+            className="container-fluid py-4 w-100"
             style={{ backgroundColor: 'antiquewhite', marginTop: '64px' }}
         >
             <div className="container" style={{ paddingTop: '40px', paddingBottom: '20px' }}>
-                <section id="titulo" className="mb-5">
+                <section id="titulo" className="mb-3">
                     <div className="card shadow-sm" style={{ border: '2px solid black' }}>
                         <div className="card-body text-center py-5">
                             <h1 style={{ color: '#c54708' }} className="mb-3">
@@ -48,40 +50,17 @@ const ProjetosSociais = () => {
                     </div>
                 </section>
 
-                <section id="diligencia" className="mb-5">
-                    <div className="card shadow-sm" style={{ border: '2px solid black' }}>
-                        <div className="card-header">
-                            <h2 style={{ color: '#c54708' }} className="mb-0">
-                                Diligência e Transparência
-                            </h2>
-                        </div>
-                        <div className="card-body">
-                            <p className="fw-bold fs-5">
-                                Para participar, a organização deve passar por um processo de análise e diligência, 
-                                garantindo o alinhamento com os critérios e a transparência das informações.
-                            </p>
-                            <p className="fw-bold fs-5">
-                                Acreditamos que a transparência e a responsabilidade são os pilares que fortalecem a confiança e o desenvolvimento sustentável das instituições parceiras.
-                            </p>
-                        </div>
-                    </div>
-                </section>
                 <section id="teste" className="mb-5">
                     <div className="card shadow-sm" style={{ border: '2px solid black' }}>
                         <div className="card-header">
                             <h2 style={{ color: '#c54708' }} className="mb-0">
-                                Teste de botões
+                                Conheça nossos Projetos
                             </h2>
                         </div>
                         <div className="card-body">
-                            <div className="col-12 mt-2 d-grid gap-2">
-                                <NavLink to={"/projetos/1"} className="btn btn-primary">
-                                    Projetos
-                                </NavLink>
-                                <NavLink to={"/cadastrar-projeto-social"} className="btn btn-primary">
-                                    Cadastrar
-                                </NavLink>
-                            </div>
+                            <Pesquisa />
+                            <TabelaDeProjetosSociais />
+                            <Paginacao />
                         </div>
                     </div>
                 </section>
