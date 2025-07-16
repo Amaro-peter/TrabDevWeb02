@@ -25,11 +25,7 @@ const Paginacao = () => {
     };
 
     if(carregandoProjetos) {
-        return (
-            <p className="fw-bold fs-5 text-center" style={{ color: '#c54708' }}>
-                Carregando projetos sociais...
-            </p>
-        );
+        return null;
     }
 
     if(errorProjetos) {
