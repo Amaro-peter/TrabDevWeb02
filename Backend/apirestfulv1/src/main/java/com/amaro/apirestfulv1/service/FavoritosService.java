@@ -32,6 +32,21 @@ public class FavoritosService{
         boolean removido = usuario.getFavoritos().removeIf(p -> p.getId().equals(idProjeto));
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean removerFavoritoDeTodosUsuarios(Long idProjeto) {
+        boolean algumRemovido = false;
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        for (Usuario usuario : usuarios) {
+            boolean removido = usuario.getFavoritos().removeIf(p -> p.getId().equals(idProjeto));
+            if(removido) {
+                usuarioRepository.save(usuario);
+                algumRemovido = true;
+            }
+        }
+
+        return algumRemovido;
+    }
+
     public List<ProjetoSocial> recuperarFavoritos(Long idUsuario) {
         return usuarioRepository.findFavoritosByUsuarioId(idUsuario);
     }

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useProjetoSocialStore from "../store/useProjetoSocialStore";
 import { useNavigate, useParams } from "react-router-dom";
 import useRecuperarProjetoSocialPorId from "../hooks/useRecuperarProjetoSocialPorId";
 import dayjs from "dayjs";
 import useUsuarioStore from "../store/useUsuarioStore";
+import useRemoverProjetosSociaisPorId from "../hooks/useRemoverProjetosSociaisPorId";
+import type { ProjetoCarrinho } from "./CardsPorSlugCategoria";
 
 const ProjetoSocialPage = () => {
     const [removido, setRemovido] = useState(false);
@@ -21,10 +23,34 @@ const ProjetoSocialPage = () => {
         error: errorProjetos
     } = useRecuperarProjetoSocialPorId(+id!, removido);
 
-    const tratarRemocao = (id: Number) => {
+    const { mutate: removerProjetoSocialPorId, error: errorRemocao } = useRemoverProjetosSociaisPorId();
+
+    const tratarRemocao = (id: number) => {
+
+        removerProjetoSocialPorId(id);
+
+        const itensDeCarrinho = localStorage.getItem("carrinho");
+        const carrinho = itensDeCarrinho ? JSON.parse(itensDeCarrinho) : [];
+
+        const novoCarrinho = carrinho.filter((item: ProjetoCarrinho) => item.idProjeto !== id);
+
+        localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
+
+        window.dispatchEvent(new Event("carrinhoAtualizado"));
+
         setMensagem("Produto removido com sucesso!");
         setRemovido(true);
-    }
+    };
+
+    useEffect(() => {
+        if(mensagem) {
+            const timeout = setTimeout(() => {
+                setMensagem("");
+            }, 10000);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [mensagem, setMensagem]);
 
     if(carregandoProjetos) {
         return <div>Carregando...</div>;
@@ -32,6 +58,10 @@ const ProjetoSocialPage = () => {
 
     if(errorProjetos) {
         throw errorProjetos;
+    }
+
+    if(errorRemocao) {
+        throw errorRemocao;
     }
 
     return (
@@ -108,7 +138,7 @@ const ProjetoSocialPage = () => {
                                                         navigate("/cadastrar-projeto-social");
                                                     }}
                                                     disabled={removido}
-                                                    className="btn btn-sm me-3 w-100"
+                                                    className="btn btn-sm w-100"
                                                     type="button"
                                                     style={{
                                                         backgroundColor: "#FFC3A5",
@@ -119,6 +149,7 @@ const ProjetoSocialPage = () => {
                                                         transition: "all 0.25s ease-in-out",
                                                         padding: "0.5em 1em",
                                                         borderRadius: "0.3em",
+                                                        minHeight: "44px",
                                                     }}
                                                     onMouseEnter={(e) => {
                                                         e.currentTarget.style.backgroundColor = "#ffc0a8";
@@ -135,7 +166,7 @@ const ProjetoSocialPage = () => {
                                         
                                             <div className="col-lg-3 col-md-4 col-12 mt-3">
                                                 <button
-                                                    /*onClick={() => tratarRemocao(projeto.id!)}*/
+                                                    onClick={() => tratarRemocao(projeto.id!)}
                                                     disabled={removido}
                                                     className="btn btn-sm w-100"
                                                     type="button"
@@ -148,6 +179,7 @@ const ProjetoSocialPage = () => {
                                                         transition: "all 0.25s ease-in-out",
                                                         padding: "0.5em 1em",
                                                         borderRadius: "0.3em",
+                                                        minHeight: "44px",
                                                     }}
                                                     onMouseEnter={(e) => {
                                                         e.currentTarget.style.backgroundColor = "#ff6b47";
@@ -159,6 +191,35 @@ const ProjetoSocialPage = () => {
                                                     }}
                                                 >
                                                     Remover
+                                                </button>
+                                            </div>
+
+                                            <div className="col-lg-3 col-md-4 col-12 mt-3">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-sm w-100"
+                                                    style={{
+                                                        backgroundColor: "#FFC3A5",
+                                                        border: "2px solid black",
+                                                        color: "#444",
+                                                        fontSize: "1rem",
+                                                        fontWeight: "bold",
+                                                        transition: "all 0.25s ease-in-out",
+                                                        padding: "0.5em 1em",
+                                                        borderRadius: "0.3em",
+                                                        minHeight: "44px",
+                                                    }}
+                                                    onMouseEnter={e => {
+                                                        e.currentTarget.style.backgroundColor = "#FF8866";
+                                                        e.currentTarget.style.transform = "scale(1.02)";
+                                                    }}
+                                                    onMouseLeave={e => {
+                                                        e.currentTarget.style.backgroundColor = "#FFC3A5";
+                                                        e.currentTarget.style.transform = "scale(1)";
+                                                    }}
+                                                    onClick={() => navigate("/projetos")}
+                                                >
+                                                    Voltar para Projetos
                                                 </button>
                                             </div>
                                         </>

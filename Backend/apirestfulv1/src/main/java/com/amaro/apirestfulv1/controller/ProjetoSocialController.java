@@ -134,7 +134,9 @@ public class ProjetoSocialController {
 
     @DeleteMapping("{idProjeto}")
     public void removerProduto(@PathVariable("idProjeto") long id) {
+        favoritosService.removerFavoritoDeTodosUsuarios(id);
         projetoSocialService.removerProjetoSocial(id);
+
     }
 
     @DeleteMapping("categoria/{idCategoria}")

@@ -3,9 +3,14 @@ import useRecuperarProjetosSociaisComPaginacao from "../hooks/useRecuperarProjet
 import type { ProjetoSocial } from "../interface/ProjetoSocial";
 import useProjetoSocialStore from "../store/useProjetoSocialStore";
 import dayjs from "dayjs";
+import type { ProjetoCarrinho } from "../pages/CardsPorSlugCategoria";
+import useRemoverProjetosSociaisPorId from "../hooks/useRemoverProjetosSociaisPorId";
+import useUsuarioStore from "../store/useUsuarioStore";
 
 
 const TabelaDeProjetosSociais = () => {
+    const usuarioLogado = useUsuarioStore((s) => s.usuarioLogado);
+
     const pagina = useProjetoSocialStore((s) => s.pagina);
     const tamanho = useProjetoSocialStore((s) => s.tamanho);
     const nome = useProjetoSocialStore((s) => s.nome);
@@ -22,6 +27,25 @@ const TabelaDeProjetosSociais = () => {
         nome: nome,
     });
 
+    const { mutate: removerProjetoSocialPorId, error: errorRemocao } = useRemoverProjetosSociaisPorId();
+
+    const tratarRemocaoNaTabela = (id: number) => {
+
+        removerProjetoSocialPorId(id);
+
+        const itensDeCarrinho = localStorage.getItem("carrinho");
+        const carrinho = itensDeCarrinho ? JSON.parse(itensDeCarrinho) : [];
+
+        const novoCarrinho = carrinho.filter((item: ProjetoCarrinho) => item.idProjeto !== id);
+
+        localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
+
+        window.dispatchEvent(new Event("carrinhoAtualizado"));
+
+        setPagina(0);
+
+    };
+
     if(carregandoProjetos) {
         return (
             <p className="fw-bold fs-5 text-center" style={{ color: '#c54708' }}>
@@ -32,6 +56,10 @@ const TabelaDeProjetosSociais = () => {
 
     if(errorProjetos) {
         throw errorProjetos;
+    }
+
+    if(errorRemocao) {
+        throw errorRemocao;
     }
 
     const projetos: ProjetoSocial[] = resultadoPaginado.itens;
@@ -86,11 +114,15 @@ const TabelaDeProjetosSociais = () => {
                                 </td>
 
                                 <td width="13%" className="text-center align-middle">
-                                    {projeto.contato}
+                                    <Link style={{ textDecoration: "none" }} to={"/projetos/" + projeto.id}>
+                                        {projeto.contato}
+                                    </Link>
                                 </td>
 
                                 <td width="13%" className="text-center align-middle">
-                                    {projeto.responsavel}
+                                    <Link style={{ textDecoration: "none" }} to={"/projetos/" + projeto.id}>
+                                        {projeto.responsavel}
+                                    </Link>
                                 </td>
 
                                 <td width="13%" className="text-center align-middle">
@@ -105,11 +137,15 @@ const TabelaDeProjetosSociais = () => {
                                     })}
                                 </td>
 
-                                <td width="13%" className="text-center align-middle">
-                                    <button /*onClick={() => tratarRemocao(produto.id!)}*/ className="btn btn-danger btn-sm" type="button">
-                                        Remover
-                                    </button>
-                                </td>
+                                {usuarioLogado === 1 && (
+                                    <>
+                                        <td width="13%" className="text-center align-middle">
+                                            <button onClick={() => tratarRemocaoNaTabela(projeto.id!)} className="btn btn-danger btn-sm" type="button">
+                                                Remover
+                                            </button>
+                                        </td>
+                                    </>
+                                )}
                             </tr>
                         ))}
                     </tbody>

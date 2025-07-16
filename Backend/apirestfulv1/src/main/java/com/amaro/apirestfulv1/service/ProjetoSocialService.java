@@ -65,6 +65,7 @@ public class ProjetoSocialService {
 
     @Transactional(rollbackFor = Exception.class)
     public void removerProjetoSocial(Long id) {
+
         projetoSocialRepository.deleteById(id);
     }
 
