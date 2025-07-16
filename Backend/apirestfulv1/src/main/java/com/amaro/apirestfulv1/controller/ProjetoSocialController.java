@@ -60,7 +60,7 @@ public class ProjetoSocialController {
     @GetMapping("paginacao")
     public ResultadoPaginado<ProjetoSocial> recuperarProdutosComPaginicao(
             @RequestParam(value = "pagina", defaultValue = "0") int pagina,
-            @RequestParam(value = "tamanho", defaultValue = "5") int tamanho,
+            @RequestParam(value = "tamanho", defaultValue = "3") int tamanho,
             @RequestParam(value = "nome", defaultValue = "") String nome
     ) {
         Pageable pageable = PageRequest.of(pagina, tamanho);

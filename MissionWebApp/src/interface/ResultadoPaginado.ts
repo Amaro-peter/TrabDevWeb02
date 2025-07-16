@@ -1,4 +1,4 @@
-export default interface ResultadoPaginado<T> {
+export interface ResultadoPaginado<T> {
     totalDeItens: number;
     totalDePaginas: number;
     paginaCorrente: number;
