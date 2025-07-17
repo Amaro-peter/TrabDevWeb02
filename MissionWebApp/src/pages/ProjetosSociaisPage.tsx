@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Paginacao from "../components/Paginacao";
 import Pesquisa from "../components/Pesquisa";
 import TabelaDeProjetosSociais from "../components/TabelaDeProjetosSociais";
@@ -16,6 +16,26 @@ const ProjetosSociais = () => {
                 style={{ backgroundColor: 'antiquewhite', marginTop: '64px' }}
             >
                 <div className="container" style={{ paddingTop: '40px', paddingBottom: '20px' }}>
+                    <nav aria-label="breadcrumb" className="mb-4">
+                        <ol className="breadcrumb bg-white px-3 py-2" style={{ border: "2px solid black" }}>
+                        <li className="breadcrumb-item">
+                            <NavLink to="/" style={{ color: "#c54708", textDecoration: "none" }}>
+                                Início
+                            </NavLink>
+                        </li>
+
+                        <li className="breadcrumb-item">
+                            <NavLink to="/juntosMais" style={{ color: "#c54708", textDecoration: "none" }}>
+                                Juntos+
+                            </NavLink>
+                        </li>
+
+                        <li className="breadcrumb-item active" aria-current="page" style={{ color: "#c54708" }}>
+                            Projetos Sociais
+                        </li>
+                        </ol>
+                    </nav>
+
                     <section id="titulo" className="mb-3">
                         <div className="card shadow-sm" style={{ border: '2px solid black' }}>
                             <div className="card-body text-center py-5">
