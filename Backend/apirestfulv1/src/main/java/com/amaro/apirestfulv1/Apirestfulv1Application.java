@@ -185,5 +185,132 @@ public class Apirestfulv1Application implements CommandLineRunner {
 		);
 		projetoSocialRepository.save(projetoSocial);
 
+		projetoSocial = new ProjetoSocial(
+				"dentessaudaveis.png",
+				"Sorriso Saudável",
+				"sorrisosaudavel",
+				"Atendimento odontológico gratuito para crianças em comunidades carentes",
+				true,
+				"Associação Sorriso Feliz",
+				"+55 (11) 98888-1122",
+				BigDecimal.valueOf(230.00),
+				LocalDate.of(2013, 9, 10),
+				saude
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"saudeidosos.png",
+				"Saúde do Idoso",
+				"saudedoidoso",
+				"Atendimento médico e atividades físicas para idosos em comunidades periféricas",
+				true,
+				"Projeto Melhor Idade",
+				"+55 (21) 97777-2233",
+				BigDecimal.valueOf(280.00),
+				LocalDate.of(2017, 5, 19),
+				saude
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"prevencao.png",
+				"Prevenir é Viver",
+				"prevenireviver",
+				"Campanhas de prevenção de doenças e vacinação em comunidades rurais",
+				true,
+				"ONG Saúde para Todos",
+				"+55 (31) 94444-3344",
+				BigDecimal.valueOf(210.00),
+				LocalDate.of(2020, 10, 30),
+				saude
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"matematica.png",
+				"Matemática Sem Medo",
+				"matematicasemmedo",
+				"Aulas de reforço em matemática para alunos do ensino fundamental",
+				true,
+				"Instituto Saber",
+				"+55 (11) 96666-4455",
+				BigDecimal.valueOf(175.00),
+				LocalDate.of(2012, 3, 14),
+				educacao
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"ingles.png",
+				"Inglês para Todos",
+				"inglesparatodos",
+				"Curso gratuito de inglês básico para jovens de escolas públicas",
+				true,
+				"Fundação Nova Língua",
+				"+55 (21) 95555-5566",
+				BigDecimal.valueOf(200.00),
+				LocalDate.of(2018, 8, 22),
+				educacao
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"leiturainfantil.png",
+				"Ler é Sonhar",
+				"leresonhar",
+				"Projeto de incentivo à leitura infantil em comunidades carentes",
+				true,
+				"Biblioteca Comunitária Esperança",
+				"+55 (61) 97777-6677",
+				BigDecimal.valueOf(160.00),
+				LocalDate.of(2021, 1, 15),
+				educacao
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"autismo.png",
+				"Inclusão Azul",
+				"inclusaoazul",
+				"Atividades de socialização e inclusão para crianças com autismo",
+				true,
+				"Associação Mundo Azul",
+				"+55 (41) 93333-7788",
+				BigDecimal.valueOf(250.00),
+				LocalDate.of(2015, 4, 28),
+				inclusao
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"mulheresempreendem.png",
+				"Mulheres em Ação",
+				"mulheresemacao",
+				"Capacitação e apoio para mulheres em situação de vulnerabilidade empreenderem",
+				true,
+				"Projeto Florescer",
+				"+55 (11) 98888-8899",
+				BigDecimal.valueOf(300.00),
+				LocalDate.of(2019, 6, 7),
+				inclusao
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+		projetoSocial = new ProjetoSocial(
+				"esporteinclusivo.png",
+				"Esporte para Todos",
+				"esporteparatodos",
+				"Atividades esportivas inclusivas para pessoas com deficiência",
+				true,
+				"ONG Movimento",
+				"+55 (31) 95555-9900",
+				BigDecimal.valueOf(220.00),
+				LocalDate.of(2022, 2, 18),
+				inclusao
+		);
+		projetoSocialRepository.save(projetoSocial);
+
+
 	}
 }
