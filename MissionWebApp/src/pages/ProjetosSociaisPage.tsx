@@ -3,10 +3,13 @@ import Paginacao from "../components/Paginacao";
 import Pesquisa from "../components/Pesquisa";
 import TabelaDeProjetosSociais from "../components/TabelaDeProjetosSociais";
 import useUsuarioStore from "../store/useUsuarioStore";
+import useProjetoSocialStore from "../store/useProjetoSocialStore";
+import type { ProjetoSocial } from "../interface/ProjetoSocial";
 
 
 const ProjetosSociais = () => {
     const usuarioLogado = useUsuarioStore((state) => state.usuarioLogado);
+    const setProjetoSocialSelecionado = useProjetoSocialStore((state) => state.setProjetoSocialSelecionado);
     const navigate = useNavigate();
 
     return (
@@ -75,7 +78,7 @@ const ProjetosSociais = () => {
                                 <div className="card-body d-flex justify-content-center">
                                     <button
                                         onClick={() => {
-                                            
+                                            setProjetoSocialSelecionado({} as ProjetoSocial);
                                             navigate("/cadastrar-projeto-social");
                                         }}
                                         className="btn btn-sm"
