@@ -15,6 +15,7 @@ interface FormLogin {
 const LoginForm = () => {
     const setUsuarioLogado = useUsuarioStore((s) => s.setUsuarioLogado);
     const setUsuarioRole = useUsuarioStore((s) => s.setUsuarioRole);
+    const setMensagem = useUsuarioStore((s) => s.setMensagem);
     const limparFavorito = useUsuarioStore((s) => s.limparFavoritos);
     const [loginInvalido, setLoginInvalido] = useState(false);
 
@@ -39,6 +40,7 @@ const LoginForm = () => {
           if(tokenResponse.token > 0) {
             setUsuarioLogado(tokenResponse.token);
             setUsuarioRole(tokenResponse.role);
+            setMensagem("");
             if(location.state?.destino) {
               navigate(location.state.destino);
             } else {

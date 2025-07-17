@@ -29,10 +29,10 @@ const useAlterarProjetoSocial = () => {
         mutationFn: (projetoSocial: ProjetoSocial) => alterarProjetoSocial(projetoSocial),
         onSuccess: (projetoAlterado: ProjetoSocial) => {
             queryClient.invalidateQueries({
-                queryKey: ["projetos"]
+                queryKey: ["projetosSociais"]
             })
             queryClient.invalidateQueries({
-                queryKey: ["projetos", projetoAlterado.id]
+                queryKey: ["projetoSocial", projetoAlterado.id]
             })
         }
     });

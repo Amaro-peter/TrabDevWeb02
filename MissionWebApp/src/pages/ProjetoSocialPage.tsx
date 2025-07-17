@@ -11,6 +11,8 @@ const ProjetoSocialPage = () => {
     const [removido, setRemovido] = useState(false);
     const usuarioLogado = useUsuarioStore((s) => s.usuarioLogado);
     const mensagem = useProjetoSocialStore((s) => s.mensagem);
+    const idRemovido = useProjetoSocialStore((s) => s.idRemovido);
+    const setIdRemovido = useProjetoSocialStore((s) => s.setIdRemovido);
     const setMensagem = useProjetoSocialStore((s) => s.setMensagem);
     const setProjetoSocialSelecionado = useProjetoSocialStore((s) => s.setProjetoSocialSelecionado);
 
@@ -38,19 +40,22 @@ const ProjetoSocialPage = () => {
 
         window.dispatchEvent(new Event("carrinhoAtualizado"));
 
-        setMensagem("Produto removido com sucesso!");
+        setMensagem(`Produto ${id} removido com sucesso! `);
+        setIdRemovido(id);
         setRemovido(true);
     };
 
     useEffect(() => {
-        if(mensagem) {
+        if(mensagem && idRemovido !== null) {
             const timeout = setTimeout(() => {
                 setMensagem("");
-            }, 10000);
+                setIdRemovido(null);
+                setRemovido(false);
+            }, 5000);
 
             return () => clearTimeout(timeout);
         }
-    }, [mensagem, setMensagem]);
+    }, [mensagem, idRemovido, setMensagem, setIdRemovido]);
 
     if(carregandoProjetos) {
         return <div>Carregando...</div>;
@@ -74,7 +79,7 @@ const ProjetoSocialPage = () => {
                     <section id="cadastro-produtos" className="mb-5">
                         <div className="card shadow-sm" style={{ border: "2px solid black" }}>
                             <div className="card-body">
-                                {mensagem && (
+                                {(mensagem && idRemovido !== null && Number(id) === idRemovido) && (
                                     <div className="alert alert-primary" role="alert">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"

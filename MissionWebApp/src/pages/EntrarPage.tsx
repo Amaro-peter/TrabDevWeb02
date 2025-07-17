@@ -14,11 +14,13 @@ const EntrarPage = () => {
     };
 
     useEffect(() => {
-        if(mensagem) {
-            handleToggle();
+        if(mensagem === "Usuário cadastrado com sucesso!") {
+            if(!showLogin) {
+                handleToggle();
+            }
             const timer = setTimeout(() => {
                 setMensagem("");
-            }, 10000);
+            }, 6000);
 
             return () => clearTimeout(timer);
         }
