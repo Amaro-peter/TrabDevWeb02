@@ -32,7 +32,19 @@ const GuiaDoDesenvolvedor = () => {
                 Se você deseja contribuir para o projeto, siga estas etapas:
               </p>
               <ol className="fw-bold fs-5">
-                <li>Faça um fork do repositório no GitHub.</li>
+                <li>
+                  Faça um fork do repositório no {" "}
+                  <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="badge bg-dark text-white"
+                  style={{ textDecoration: "none" }}
+                  >
+                    GitHub
+                  </a>
+                  .
+                </li>
                 <li>Crie uma branch para sua feature ou correção de bug.</li>
                 <li>Faça suas alterações e commit.</li>
                 <li>Envie um pull request para o repositório original.</li>

@@ -1,9 +1,18 @@
 import { NavLink } from "react-router-dom";
 import "./css/Style.css";
 import useUsuarioStore from "../store/useUsuarioStore";
+import { useState } from "react";
 
 const NavBar = () => {
   const usuarioLogaodo = useUsuarioStore((s) => s.usuarioLogado);
+
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => setLoading(false), 2000); // simula envio por 2s
+  };
 
   return (
     <>
@@ -181,9 +190,16 @@ const NavBar = () => {
               </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary">
-                Enviar
-              </button>
+              {loading ? (
+                <button type="button" className="btn btn-primary" disabled>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  {" Enviando..."}
+                </button>
+              ) : (
+                <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                  Enviar
+                </button>
+              )}
             </div>
           </div>
         </div>
