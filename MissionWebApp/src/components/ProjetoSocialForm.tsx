@@ -10,8 +10,7 @@ import { useNavigate } from "react-router-dom";
 import type { ProjetoSocial } from "../interface/ProjetoSocial";
 import slugify from "slugify";
 import type { Categoria } from "../interface/Categoria";
-import useCadastrarProjetoSocial from "../hooks/useCadastrarProjetoSocial";
-import useAlterarProjetoSocial from "../hooks/useAlterarProjetoSocial";
+import useAPI from "../hooks/useAPI";
 
 const regexData = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/;
 
@@ -99,10 +98,12 @@ const ProjetoSocialForm = () => {
         resolver: zodResolver(schema)
     });
 
+    const { useCadastrarProjetoSocial, useAlterarProjetoSocial } = useAPI;
+
     const { mutate: cadastrarProjetoSocial, error: errorCadastrar } = useCadastrarProjetoSocial();
 
     const { mutate: alterarProjetoSocial, error: errorAlterar } = useAlterarProjetoSocial();
-
+    
     const submit = ({
         nome,
         descricao,

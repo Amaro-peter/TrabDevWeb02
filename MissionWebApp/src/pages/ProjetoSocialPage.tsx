@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import useProjetoSocialStore from "../store/useProjetoSocialStore";
 import { useNavigate, useParams } from "react-router-dom";
-import useRecuperarProjetoSocialPorId from "../hooks/useRecuperarProjetoSocialPorId";
 import dayjs from "dayjs";
 import useUsuarioStore from "../store/useUsuarioStore";
-import useRemoverProjetosSociaisPorId from "../hooks/useRemoverProjetosSociaisPorId";
 import type { ProjetoCarrinho } from "./CardsPorSlugCategoria";
+import useAPI from "../hooks/useAPI";
 
 const ProjetoSocialPage = () => {
     const [removido, setRemovido] = useState(false);
@@ -18,6 +17,8 @@ const ProjetoSocialPage = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
+
+    const { useRecuperarProjetoSocialPorId, useRemoverProjetosSociaisPorId } = useAPI;
 
     const {
         data: projeto,
