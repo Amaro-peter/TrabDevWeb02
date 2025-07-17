@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import "./css/Style.css";
 
 const GuiaDoProjetoSocial = () => {
@@ -8,6 +9,19 @@ const GuiaDoProjetoSocial = () => {
         style={{ backgroundColor: "antiquewhite" }}
       >
         <div className="container" style={{ paddingTop: "80px", paddingBottom: "20px" }}>
+          <nav aria-label="breadcrumb" className="mb-4">
+            <ol className="breadcrumb bg-white px-3 py-2" style={{ border: "2px solid black" }}>
+              <li className="breadcrumb-item">
+                <NavLink to="/" style={{ color: "#c54708", textDecoration: "none" }}>
+                  Início
+                </NavLink>
+              </li>
+              <li className="breadcrumb-item active" aria-current="page" style={{ color: "#c54708" }}>
+                Guia do Projeto Social
+              </li>
+            </ol>
+          </nav>
+
           <section id="titulo" className="mb-5">
             <div className="card shadow-sm border border-2 border-dark">
               <div className="card-body text-center py-5">
