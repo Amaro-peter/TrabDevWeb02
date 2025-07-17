@@ -381,7 +381,7 @@ const ProjetoSocialForm = () => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default ProjetoSocialForm
+export default ProjetoSocialForm;
