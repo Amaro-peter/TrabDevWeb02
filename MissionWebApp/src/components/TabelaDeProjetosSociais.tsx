@@ -93,7 +93,7 @@ const TabelaDeProjetosSociais = () => {
 
                                 <td width="13%" className="text-center align-middle">
                                     <Link style={{ textDecoration: "none" }} to={"/projetos/" + projeto.id}>
-                                        <img src={projeto.imagem} alt="imagem do projeto" style={{width: "40px"}} />
+                                        <img src={projeto.imagem} alt="imagem do projeto" style={{width: "150px"}} />
                                     </Link>
                                 </td>
 
