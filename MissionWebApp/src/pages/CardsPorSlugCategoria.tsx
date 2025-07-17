@@ -113,7 +113,7 @@ const CardsPorSlugCategoria = () => {
     const projetosNoCarrinho: (ProjetoCarrinho | null)[] = [];
 
     data.pages.forEach((page) => {
-        page.itens.forEach((projeto) => {
+        page.itens.forEach((projeto: ProjetoSocial) => {
             const projCarrinho = carrinho.find((item: ProjetoCarrinho) => item.idProjeto === projeto.id);
             projetosNoCarrinho.push(projCarrinho ? projCarrinho : null);
         });
@@ -123,7 +123,7 @@ const CardsPorSlugCategoria = () => {
         <>
             <div className="row">
                 {data.pages.map((page, pagina) =>
-                    page.itens.map((projeto, index) => (
+                    page.itens.map((projeto: ProjetoSocial, index: number) => (
                         <div key={projeto.id} className="col-md-4 col-12 mb-4">
                             <Card 
                             projeto= {projeto} 

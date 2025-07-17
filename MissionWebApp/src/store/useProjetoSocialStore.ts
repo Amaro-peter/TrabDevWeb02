@@ -6,11 +6,13 @@ interface ProjetoSocialStore {
     tamanho: number;
     nome: string;
     mensagem: string;
+    idRemovido: number | null;
     projetoSocialSelecionado: ProjetoSocial;
 
     setPagina: (novaPagina: number) => void;
     setNome: (novoNome: string) => void;
     setMensagem: (novaMensagem: string) => void;
+    setIdRemovido: (id: number | null) => void;
     setProjetoSocialSelecionado: (novoProjetoSocialSelecionado: ProjetoSocial) => void;
 }
 
@@ -19,11 +21,13 @@ const useProjetoSocialStore = create<ProjetoSocialStore>((set) => ({
     tamanho: 3,
     nome: "",
     mensagem: "",
+    idRemovido: null,
     projetoSocialSelecionado: {} as ProjetoSocial,
 
     setPagina: (novaPagina: number) => set(() => ({pagina: novaPagina})),
     setNome: (novoNome: string) => set(() => ({nome: novoNome})),
     setMensagem: (novaMensagem: string) => set(() => ({mensagem: novaMensagem})),
+    setIdRemovido: (id: number | null) => set(() => ({idRemovido: id})),
     setProjetoSocialSelecionado: (novoProjetoSocialSelecionado: ProjetoSocial) => 
         set(() => ({projetoSocialSelecionado: novoProjetoSocialSelecionado})),
 }));

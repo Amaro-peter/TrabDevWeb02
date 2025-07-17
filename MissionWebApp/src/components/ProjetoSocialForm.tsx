@@ -59,6 +59,7 @@ type ProjetoSocialFormData = z.infer<typeof schema>;
 
 const ProjetoSocialForm = () => {
     const setMensagem = useProjetoSocialStore((s) => s.setMensagem);
+    const setIdRemovido = useProjetoSocialStore((s) => s.setIdRemovido);
     const projetoSelecionado = useProjetoSocialStore((s) => s.projetoSocialSelecionado);
 
     const setValoresIniciais = () => {
@@ -135,14 +136,16 @@ const ProjetoSocialForm = () => {
             projetoSocial.id = projetoSelecionado.id;
             alterarProjetoSocial(projetoSocial, {
                 onSuccess: (projetoAlterado: ProjetoSocial) => {
-                    setMensagem("Produto alterado com sucesso!");
+                    setMensagem(`Projeto social ${projetoAlterado.id} alterado com sucesso! `);
+                    setIdRemovido(projetoAlterado.id!);
                     navigate("/projetos/" + projetoAlterado.id);
                 }
             });
         } else {
             cadastrarProjetoSocial(projetoSocial, {
                 onSuccess: (projetoCadastrado: ProjetoSocial) => {
-                    setMensagem("Projeto social cadastrado com sucesso!");
+                    setMensagem(`Projeto social ${projetoCadastrado.id} cadastrado com sucesso! `);
+                    setIdRemovido(projetoCadastrado.id!);
                     navigate("/projetos/" + projetoCadastrado.id);
                 }
             });
